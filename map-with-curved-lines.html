@@ -225,8 +225,8 @@
     // prepare line series data
     var destinations = ["reykjavik", "lisbon", "moscow", "belgrade", "ljublana", "madrid", "stockholm", "bern", "kiev", "new york"];
     // London coordinates
-    var originLongitude = -6.8704;
-    var originLatitude = 33.9905;
+    var originLongitude =-0.1262;//-6.8704;
+    var originLatitude = 51.5002;//33.9905;
     
     am5.array.each(destinations, function (did) {
       var destinationDataItem = citySeries.getDataItemById(did);
@@ -259,7 +259,7 @@
       planeDataItem.animate({
         key: "positionOnLine",
         to: 1,
-        duration: 10000,
+        duration: 5000,
         loops: 1,
         easing: am5.ease.yoyo(am5.ease.linear)
       });
@@ -269,6 +269,7 @@
         }
 
         if (planeDataItem.dataContext.prevPosition > value) {
+          walo();
           plane.set("rotation", -180);
           
         }
@@ -279,6 +280,38 @@
         positionOnLine: 0.5,
         autoRotate: true
       });
+
+
+      //functions :
+      function getCityGeometry(cityId) {
+      // Find the city object with the given id
+      var city = cities.find(function(city) {
+        return city.id === cityId;
+      });
+
+      // Return the geometry object if the city is found
+      if (city) {
+        return city.geometry.coordinates;
+      }
+
+      // Return null if the city is not found
+      return null;
+      }
+
+      function walo(){
+        arrowSeries.pushDataItem({
+        lineDataItem: lineSeries.pushDataItem({ geometry: { type: "LineString", coordinates: [[-3.7033, 40.4167],getCityGeometry("rabat")] } }),
+        positionOnLine: 0.5,
+        autoRotate: true
+        });
+        planeSeries.pushDataItem({
+        lineDataItem: lineSeries.pushDataItem({ geometry: { type: "LineString", coordinates: [getCityGeometry("rabat"),[-3.7033, 40.4167]] } })
+        ,positionOnLine: planeDataItem.dataContext.prevPosition,
+        autoRotate: true
+        });
+      }
+
+
     })
 
  
