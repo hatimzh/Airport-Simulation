@@ -14,6 +14,9 @@
     
     <!-- Chart code -->
     <script>
+    //input :
+    citydestid=prompt('Origine City :').toLowerCase();
+    
     am5.ready(function() {
     
     // Create root element
@@ -139,94 +142,105 @@
     
     var cities = [
       {
-        id: "brussels",
-        title: "Brussels",
-        geometry: { type: "Point", coordinates: [4.3676, 50.8371] }
-      },{
         id: "london",
         title: "London",
         geometry: { type: "Point", coordinates: [-0.1262, 51.5002] },
+        destinations : ['new york','oslo','paris','lisbon']
       },
        {
-        id: "prague",
-        title: "Prague",
-        geometry: { type: "Point", coordinates: [14.4205, 50.0878] }
-      }, {
         id: "athens",
         title: "Athens",
-        geometry: { type: "Point", coordinates: [23.7166, 37.9792] }
-      }, {
-        id: "reykjavik",
-        title: "Reykjavik",
-        geometry: { type: "Point", coordinates: [-21.8952, 64.1353] }
-      }, {
-        id: "dublin",
-        title: "Dublin",
-        geometry: { type: "Point", coordinates: [-6.2675, 53.3441] }
+        geometry: { type: "Point", coordinates: [23.7166, 37.9792] },
+        destinations : ['madrid','rabat']
       }, {
         id: "oslo",
         title: "Oslo",
-        geometry: { type: "Point", coordinates: [10.7387, 59.9138] }
+        geometry: { type: "Point", coordinates: [10.7387, 59.9138] },
+        destinations : ['lisbon','moscow']
       }, {
         id: "lisbon",
         title: "Lisbon",
-        geometry: { type: "Point", coordinates: [-9.1355, 38.7072] }
+        geometry: { type: "Point", coordinates: [-9.1355, 38.7072] },
+        destinations : ['oslo','london']
       }, {
         id: "moscow",
         title: "Moscow",
-        geometry: { type: "Point", coordinates: [37.6176, 55.7558] }
-      }, {
-        id: "belgrade",
-        title: "Belgrade",
-        geometry: { type: "Point", coordinates: [20.4781, 44.8048] }
-      }, {
-        id: "bratislava",
-        title: "Bratislava",
-        geometry: { type: "Point", coordinates: [17.1547, 48.2116] }
-      }, {
-        id: "ljublana",
-        title: "Ljubljana",
-        geometry: { type: "Point", coordinates: [14.5060, 46.0514] }
+        geometry: { type: "Point", coordinates: [37.6176, 55.7558] },
+        destinations : [' kiev']
       }, {
         id: "madrid",
         title: "Madrid",
-        geometry: { type: "Point", coordinates: [-3.7033, 40.4167] }
+        geometry: { type: "Point", coordinates: [-3.7033, 40.4167] },
+        destinations : ['rabat','oslo','paris']
       }, {
         id: "stockholm",
         title: "Stockholm",
-        geometry: { type: "Point", coordinates: [18.0645, 59.3328] }
-      }, {
-        id: "bern",
-        title: "Bern",
-        geometry: { type: "Point", coordinates: [7.4481, 46.9480] }
+        geometry: { type: "Point", coordinates: [18.0645, 59.3328] },
+        destinations : ['madrid','lisbon']
       }, {
         id: "kiev",
         title: "Kiev",
-        geometry: { type: "Point", coordinates: [30.5367, 50.4422] }
+        geometry: { type: "Point", coordinates: [30.5367, 50.4422] },
+        destinations : ['moscow']
       }, {
         id: "paris",
         title: "Paris",
-        geometry: { type: "Point", coordinates: [2.3510, 48.8567] }
+        geometry: { type: "Point", coordinates: [2.3510, 48.8567] },
+        destinations : ['rabat','madrid','london']
       }, {
         id: "new york",
         title: "New York",
-        geometry: { type: "Point", coordinates: [-74, 40.43] }
+        geometry: { type: "Point", coordinates: [-74, 40.43] },
+        destinations : ['rabat','london']
       },{
         id:"rabat",
         title:"Rabat",
-        geometry:{type:"Point", coordinates:[-6.8704,33.9905] }
+        geometry:{type:"Point", coordinates:[-6.8704,33.9905] },
+        destinations : ['new york','madrid','paris']
       
       }//zyada cities :
       
     ];
     
     citySeries.data.setAll(cities);
+
     
+    // get coordinates :
+    function getCityGeometry(cityId) {
+      // Find the city object with the given id
+      var city = cities.find(function(city) {
+        return city.id === cityId;
+      });
+
+      // Return the geometry object if the city is found
+      if (city) {
+        return city.geometry.coordinates;
+      }
+
+      // Return null if the city is not found
+      return null;
+      }
+    //function get destination :
+    function getdest(cityId){
+        // Find the city object with the given id
+      var city = cities.find(function(city) {
+        return city.id === cityId;
+      });
+
+      // Return the geometry object if the city is found
+      if (city) {
+        return city.destinations;
+      }
+
+      // Return null if the city is not found
+      return null;
+      }
     // prepare line series data
-    var destinations = ["reykjavik", "lisbon", "moscow", "belgrade", "ljublana", "madrid", "stockholm", "bern", "kiev", "new york"];
+
+    var destinations = getdest(citydestid);
     // London coordinates
-    var originLongitude =-0.1262;//-6.8704;
-    var originLatitude = 51.5002;//33.9905;
+    var originLongitude =getCityGeometry(citydestid)[0];//-0.1262;//-6.8704;
+    var originLatitude = getCityGeometry(citydestid)[1];//51.5002;//33.9905;
     
     am5.array.each(destinations, function (did) {
       var destinationDataItem = citySeries.getDataItemById(did);
@@ -283,20 +297,6 @@
 
 
       //functions :
-      function getCityGeometry(cityId) {
-      // Find the city object with the given id
-      var city = cities.find(function(city) {
-        return city.id === cityId;
-      });
-
-      // Return the geometry object if the city is found
-      if (city) {
-        return city.geometry.coordinates;
-      }
-
-      // Return null if the city is not found
-      return null;
-      }
 
       function walo(){
         arrowSeries.pushDataItem({
@@ -310,6 +310,78 @@
         autoRotate: true
         });
       }
+      //distance btween 2 cities :
+      function deg2rad(deg) {
+        return deg * (Math.PI/180)
+      }
+      
+      function getDistanceFromLatLonInKm(City1,City2) {
+        lon1=getCityGeometry(City1)[0];lat1=getCityGeometry(City1)[1];
+        lon2=getCityGeometry(City2)[0];lat2=getCityGeometry(City2)[1];
+        const R = 6371; // Radius of the earth in km
+        const dLat = deg2rad(lat2 - lat1);  // deg2rad below
+        const dLon = deg2rad(lon2 - lon1);
+        const a =
+          Math.sin(dLat / 2) * Math.sin(dLat / 2) +
+          Math.cos(deg2rad(lat1)) * Math.cos(deg2rad(lat2)) *
+          Math.sin(dLon / 2) * Math.sin(dLon / 2);
+        const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+        const d = R * c; // Distance in km
+        return d;
+      }
+
+      //Dijkstra graphe:
+    var graph = {
+      london: {
+        newyork: getDistanceFromLatLonInKm("london", "new york"),
+        oslo: getDistanceFromLatLonInKm("london", "oslo"),
+        paris: getDistanceFromLatLonInKm("london", "paris"),
+        lisbon: getDistanceFromLatLonInKm("london", "lisbon"),
+      },
+      athens: {
+        madrid: getDistanceFromLatLonInKm("athens", "madrid"),
+        rabat: getDistanceFromLatLonInKm("athens", "rabat"),
+      },
+      oslo: {
+        lisbon: getDistanceFromLatLonInKm("oslo", "lisbon"),
+        moscow: getDistanceFromLatLonInKm("oslo", "moscow"),
+      },
+      lisbon: {
+        oslo: getDistanceFromLatLonInKm("lisbon", "oslo"),
+        london: getDistanceFromLatLonInKm("lisbon", "london"),
+      },
+      moscow: {
+        kiev: getDistanceFromLatLonInKm("moscow", "kiev"),
+      },
+      madrid: {
+        rabat: getDistanceFromLatLonInKm("madrid", "rabat"),
+        oslo: getDistanceFromLatLonInKm("madrid", "oslo"),
+      },
+      rabat: {
+      athens: getDistanceFromLatLonInKm("rabat", "athens"),
+      madrid: getDistanceFromLatLonInKm("rabat", "madrid"),
+      },
+      kiev: {
+      moscow: getDistanceFromLatLonInKm("kiev", "moscow"),
+      },
+      new_york:{
+      rabat: getDistanceFromLatLonInKm("new york","rabat"),
+      london:getDistanceFromLatLonInKm("new york","london"),
+      },
+      paris:{
+        rabat:getDistanceFromLatLonInKm("paris","rabat"),
+        madird :getDistanceFromLatLonInKm("paris","madrid") ,
+        london : getDistanceFromLatLonInKm("paris","london"),
+      },
+      stockholm:{
+        madird: getDistanceFromLatLonInKm("stockholm","madrid"),
+        lisbon: getDistanceFromLatLonInKm("stockholm","lisbon"),
+      }
+
+      };
+    // fin graphe
+
+      
 
 
     })
