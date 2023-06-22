@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Choix des villes</title>
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-KK94CHFLLe+nY2dmCWGMq91rCGa5gtU4mk92HdvYe+M/SXH301p5ILy+dN9+nJOZ" crossorigin="anonymous">
+<style>
+    body {
+        font-family: Arial, sans-serif;
+        background: linear-gradient(rgba(0, 0, 0, 0.6), rgba(0, 0, 0, 0.6)), url('R.jpeg');
+        background-size: cover;
+        background-position: center;
+        background-repeat: no-repeat;
+        background-attachment: fixed;
+        color: #fff;
+    }
+
+    h1 {
+        text-align: center;
+        padding: 20px;
+    }
+
+    form {
+        max-width: 400px;
+        margin: 0 auto;
+        padding: 20px;
+        background-color: rgba(255, 255, 255, 0.8);
+        border-radius: 5px;
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
+    }
+
+    label {
+        display: block;
+        margin-bottom: 8px;
+        color: #333;
+    }
+
+    select,input {
+        width: 100%;
+        padding: 8px;
+        border: 1px solid #ccc;
+        border-radius: 4px;
+        box-sizing: border-box;
+        font-size: 14px;
+        color: #555;
+    }
+
+    input[type="submit"] {
+        display: block;
+        width: 100%;
+        padding: 10px;
+        margin-top: 20px;
+        font-size: 16px;
+        font-weight: bold;
+        color: #fff;
+        
+        border: none;
+        border-radius: 4px;
+        cursor: pointer;
+    }
+
+   
+    
+    #liaisons{
+    	
+    	position: absolute;
+    	bottom: 10px;
+    	right: 45%;
+    	transform: translate(-50%, -50%);
+    	border:0;
+    	
+    }
+</style>
+</head>
+<body>
+<h1>Choix des villes</h1>
+<form action="map.jsp" method="get">
+
+    <label for="start">Start:</label>
+    <select id="mySelect1" name="start" title="Ville de départ" required>
+        <option selected disabled value="">Choisir une ville</option>
+        <optgroup label="Europe">
+            <option value="madrid">Madrid</option>
+            <option value="paris">Paris</option>
+            <option value="kiev">Kiev</option>
+            <option value="stockholm">Stockholm</option>
+            <option value="moscow">Moscow</option>
+            <option value="lisbon">Lisbon</option>
+            <option value="oslo">Oslo</option>
+            <option value="london">London</option>
+        </optgroup>
+        <optgroup label="Africa">
+            <option value="rabat">Rabat</option>
+            <option value="tunis">Tunis</option>
+            <option value="algiers">Algiers</option>
+        </optgroup>
+        <optgroup label="America">
+            <option value="new york">New York</option>
+        </optgroup>
+    </select>
+
+    <label for="destination">Destination:</label>
+    <select id="mySelect" name="destination" title="Ville de destination" required>
+        <option selected disabled value="">Choisir une ville</option>
+        <optgroup label="Europe">
+            <option value="madrid">Madrid</option>
+            <option value="paris">Paris</option>
+            <option value="kiev">Kiev</option>
+            <option value="stockholm">Stockholm</option>
+            <option value="moscow">Moscow</option>
+            <option value="lisbon">Lisbon</option>
+            <option value="oslo">Oslo</option>
+            <option value="london">London</option>
+        </optgroup>
+        <optgroup label="Africa">
+            <option value="rabat">Rabat</option>
+            <option value="tunis">Tunis</option>
+            <option value="algiers">Algiers</option>
+        </optgroup>
+        <optgroup label="America">
+            <option value="new york">New York</option>
+        </optgroup>
+    </select>
+    <label>Duration :</label>
+    <input name="duration" placeholder="Nombre des secondes" class="form-control" style="margin:10px;margin-left:0px;" type="number" required>
+
+    <input class="btn  btn-primary" name="ok" value="OK" type="submit">
+    
+</form>
+<button onclick="window.location.href='liaisons.jsp';" id="liaisons" class="btn  btn-primary" >Liaisons</button>
+<script>
+  var select = document.getElementById("mySelect");
+  var optgroups = select.getElementsByTagName("optgroup");
+  for (var i = 0; i < optgroups.length; i++) {
+    var options = Array.from(optgroups[i].getElementsByTagName("option"));
+    options.sort(function(a, b) {
+      var textA = a.text.toUpperCase();
+      var textB = b.text.toUpperCase();
+      return (textA < textB) ? -1 : (textA > textB) ? 1 : 0;
+    });
+    options.forEach(function(option) {
+      optgroups[i].appendChild(option);
+    });
+  }
+  
+  var select1 = document.getElementById("mySelect1");
+  var optgroups1 = select1.getElementsByTagName("optgroup");
+  for (var i = 0; i < optgroups1.length; i++) {
+    var options1 = Array.from(optgroups1[i].getElementsByTagName("option"));
+    options1.sort(function(a, b) {
+      var textA = a.text.toUpperCase();
+      var textB = b.text.toUpperCase();
+      return (textA < textB) ? -1 : (textA > textB) ? 1 : 0;
+    });
+    options1.forEach(function(option) {
+      optgroups1[i].appendChild(option);
+    });
+  }
+</script>
+</body>
+</html>
